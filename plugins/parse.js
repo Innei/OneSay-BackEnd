@@ -37,7 +37,6 @@ if (dir) {
     if (!field) {
       const res = await Config.create({ name: 'total', value: num })
 
-      console.log(res)
     } else {
       let num_inside = field.value
 
@@ -45,7 +44,6 @@ if (dir) {
         { name: 'total' },
         { value: num_inside + num }
       )
-        console.log(total)
     }
   })()
 }
