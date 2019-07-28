@@ -1,0 +1,21 @@
+@url=http://localhost:8001/api/says
+### get says
+get {{url}}
+
+### post
+post {{url}}/new
+Content-Type: application/json
+
+{
+    "author": "yiny",
+    "content": "test"
+}
+
+### put modify
+put {{url}}/modify/1
+Content-Type: application/json
+
+{
+    "author": "innei",
+    "content": "t22"
+}

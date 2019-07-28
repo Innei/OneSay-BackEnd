@@ -6,22 +6,68 @@ module.exports = app => {
     mergeParams: true
   })
   router.get('/', async (req, res) => {
-    const num = await Config.findOne({ name: 'total' })
-    ? (await Config.findOne({ name: 'total' })).value
+    const num = (await Config.findOne({ name: 'total' }))
+      ? (await Config.findOne({ name: 'total' })).value
       : 0
     if (num) {
-      const random = Math.floor(Math.random() * num)
+      let random = Math.floor(Math.random() * num) + 1
       const item = await Say.findOne().skip(random)
       res.send({
-        random,
-        item
+        id: ++random,
+        ...item._doc
       })
     }
   })
   router.get('/all', async (req, res) => {
-    const saysItems = await Say.find()
+    let id = 0
+    const saysItems = (await Say.find()).map(item => {
+      // delete item["__v"]
+      item.id = ++id
+      return item
+    })
     res.send(saysItems)
   })
 
+  router.post('/new', async (req, res) => {
+    const { author, content } = req.body
+    let id = 0
+    if (!(await Config.findOne({ name: 'total' }))) {
+      const config = await Config.create({
+        name: 'total',
+        value: 1
+      })
+      id = 1
+    } else {
+      await Config.findOneAndUpdate(
+        { name: 'total' },
+        {
+          $inc: {
+            value: 1
+          }
+        }
+      )
+      id = (await Config.findOne({ name: 'total' })).value
+    }
+    const model = await Say.create({
+      id,
+      author,
+      content,
+      create_time: Date.now()
+    })
+   
+    res.send(model)
+  })
+  router.put('/modify/:id', async (req, res) => {
+    const id = req.params.id
+    const { author, content } = req.body
+    const item = await Say.updateOne(
+      {id},
+      {
+        author,
+        content
+      }
+    )
+    res.send(item)
+  })
   app.use('/api/says', router)
 }
