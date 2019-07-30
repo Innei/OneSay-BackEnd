@@ -19,6 +19,10 @@ const schema = new mongoose.Schema({
   },
   modify_time: {
     type: String
+  },
+  views: {
+    type: Number,
+    default: 0
   }
 })
 module.exports = mongoose.model('Say', schema)

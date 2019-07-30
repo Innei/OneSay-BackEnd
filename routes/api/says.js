@@ -13,6 +13,11 @@ module.exports = app => {
     if (num) {
       let random = Math.floor(Math.random() * num)
       const item = await Say.findOne().skip(random)
+      await Say.updateOne({ id: ++random }, {
+        $inc: {
+          views: 1
+        }
+      })
       res.send({
         item
       })

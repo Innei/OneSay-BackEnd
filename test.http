@@ -7,7 +7,7 @@ post {{url}}/new
 Content-Type: application/json
 
 {
-    "author": "yiny",
+    "author": "yiny1111",
     "content": "test"
 }
 
