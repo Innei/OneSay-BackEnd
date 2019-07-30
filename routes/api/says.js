@@ -1,24 +1,24 @@
 const express = require('express')
 const Say = require('../../models/Say')
 const Config = require('../../models/Config')
+const isConfig = require('../../middlewares/isConfig')()
 module.exports = app => {
   const router = express.Router({
     mergeParams: true
   })
-  router.get('/', async (req, res) => {
+  router.get('/', isConfig, async (req, res) => {
     const num = (await Config.findOne({ name: 'total' }))
       ? (await Config.findOne({ name: 'total' })).value
       : 0
     if (num) {
-      let random = Math.floor(Math.random() * num) + 1
+      let random = Math.floor(Math.random() * num)
       const item = await Say.findOne().skip(random)
       res.send({
-        id: ++random,
-        ...item._doc
+        item
       })
     }
   })
-  router.get('/all', async (req, res) => {
+  router.get('/all', isConfig, async (req, res) => {
     let id = 0
     const saysItems = (await Say.find()).map(item => {
       // delete item["__v"]
@@ -54,17 +54,18 @@ module.exports = app => {
       content,
       create_time: Date.now()
     })
-   
+
     res.send(model)
   })
   router.put('/modify/:id', async (req, res) => {
     const id = req.params.id
     const { author, content } = req.body
     const item = await Say.updateOne(
-      {id},
+      { id },
       {
         author,
-        content
+        content,
+        modify_time: Date.now()
       }
     )
     res.send(item)
