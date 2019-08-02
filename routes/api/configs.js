@@ -1,7 +1,7 @@
 const express = require('express')
 const Say = require('../../models/Say')
 const Config = require('../../models/Config')
-const isConfig = require('../../middlewares/isConfig')()
+
 module.exports = app => {
   const router = express.Router({
     mergeParams: true
@@ -12,5 +12,10 @@ module.exports = app => {
     info.value.times = times
     res.send(info)
   })
-  app.use('/api/says/info', router)
+  router.get('/my-info', async (req, res) => {
+    const info = await Config.findOne({ name: "my-info" })
+    
+    res.send(info)
+  })
+  app.use('/api/info', router)
 }
