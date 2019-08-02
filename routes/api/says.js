@@ -76,4 +76,6 @@ module.exports = app => {
     res.send(item)
   })
   app.use('/api/says', router)
+
+  require('./configs')(app)
 }

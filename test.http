@@ -19,3 +19,6 @@ Content-Type: application/json
     "author": "innei",
     "content": "t22"
 }
+
+### info 
+get {{url}}/info
