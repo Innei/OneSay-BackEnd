@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- 引入样式 -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+    />
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <title>Login</title>
+    <link rel="stylesheet" href="./assert/main.css" type="text/css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="main card">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>登陆</span>
+            <el-button style="float: right; padding: 3px 0" type="text"
+              >注册</el-button
+            >
+          </div>
+          <el-form :model="userForm">
+            <el-form-item label="用户名">
+              <el-input
+                v-model="userForm.username"
+                placeholder="请输入内容"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="密码"
+              ><el-input
+                placeholder="请输入密码"
+                v-model="userForm.password"
+                show-password
+              ></el-input
+            ></el-form-item>
+
+            <el-button type="primary" @click="onSubmit">登陆</el-button>
+          </el-form>
+        </el-card>
+      </div>
+    </div>
+  </body>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        userForm: {
+          username: '',
+          password: ''
+        }
+      },
+      methods: {
+        onSubmit() {
+          axios.post('<%= loginApi %>', this.userForm).then(res => {
+            this.$message('登陆成功')
+            localStorage.token = res.data
+            location.href = '<%= saysApi %>'
+          })
+        }
+      },
+      created() {
+        if (localStorage.token) {
+          axios
+            .post('<%= loginApi %>/auth', { token: localStorage.token })
+            .then(res => {
+              console.log(res.data.code)
+              if (res.data.code === 200) {
+                location.href = '<%= saysApi %>'
+              } else {
+                localStorage.clear()
+              }
+            })
+        }
+      }
+    })
+  </script>
+</html>
