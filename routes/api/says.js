@@ -26,6 +26,11 @@ module.exports = app => {
         item
       })
     }
+    else {
+      res.send({
+        msg: "没有数据"
+      })
+    }
   })
   router.get('/all', isConfig, async (req, res) => {
     let id = 0
