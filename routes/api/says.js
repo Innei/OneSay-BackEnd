@@ -2,6 +2,7 @@ const express = require('express')
 const Say = require('../../models/Say')
 const Config = require('../../models/Config')
 const isConfig = require('../../middlewares/isConfig')()
+const auth = require('../../middlewares/auth')()
 module.exports = app => {
   const router = express.Router({
     mergeParams: true
@@ -13,11 +14,14 @@ module.exports = app => {
     if (num) {
       let random = Math.floor(Math.random() * num)
       const item = await Say.findOne().skip(random)
-      await Say.updateOne({ id: ++random }, {
-        $inc: {
-          views: 1
+      await Say.updateOne(
+        { id: ++random },
+        {
+          $inc: {
+            views: 1
+          }
         }
-      })
+      )
       res.send({
         item
       })
@@ -33,7 +37,7 @@ module.exports = app => {
     res.send(saysItems)
   })
 
-  router.post('/new', async (req, res) => {
+  router.post('/new', auth, async (req, res) => {
     const { author, content } = req.body
     let id = 0
     if (!(await Config.findOne({ name: 'total' }))) {
@@ -62,7 +66,7 @@ module.exports = app => {
 
     res.send(model)
   })
-  router.put('/modify/:id', async (req, res) => {
+  router.put('/modify/:id', auth, async (req, res) => {
     const id = req.params.id
     const { author, content } = req.body
     const item = await Say.updateOne(
