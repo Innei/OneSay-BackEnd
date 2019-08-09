@@ -1,4 +1,4 @@
 module.exports = {
-  key: 'yiny',
+  key: 'default',
   backendURL: ''
 }
