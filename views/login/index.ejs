@@ -70,7 +70,6 @@
           axios
             .post('<%= loginApi %>/auth', { token: localStorage.token })
             .then(res => {
-              console.log(res.data.code)
               if (res.data.code === 200) {
                 location.href = '<%= saysApi %>'
               } else {

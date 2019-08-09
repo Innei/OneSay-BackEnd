@@ -1,5 +1,6 @@
 @url=http://localhost:8001/api/says
 @host=http://localhost:8001/
+
 ### get says
 get {{url}}
 
@@ -9,8 +10,8 @@ Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGE1ZWVlYmMyMmI2NTkxNzc0NjNlNSIsImlhdCI6MTU2NTI3MDA5OX0.ViANElBY5JlEioB0D4Edu0hTpfpblCktvjjBC1ULjCo
 
 {
-    "author": "yiny1111",
-    "content": "test"
+    "author": "yiny",
+    "content": "学习本身是枯燥的，但如果变成你要学，而不是要你学，那就变成了一件非常快乐的事情。"
 }
 
 ### put modify
@@ -44,3 +45,15 @@ Content-Type: application/json
     "password": "1"
 }
 
+### configs post
+post {{host}}api/info/query/test2
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGE1ZWVlYmMyMmI2NTkxNzc0NjNlNSIsImlhdCI6MTU2NTI3MDA5OX0.ViANElBY5JlEioB0D4Edu0hTpfpblCktvjjBC1ULjCo
+
+{
+    "value": "2"
+}
+
+### get all configs
+get {{host}}api/info/all
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGE1ZWVlYmMyMmI2NTkxNzc0NjNlNSIsImlhdCI6MTU2NTI3MDA5OX0.ViANElBY5JlEioB0D4Edu0hTpfpblCktvjjBC1ULjCo

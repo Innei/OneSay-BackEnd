@@ -7,6 +7,7 @@ const User = require('../models/User')
 const Config = require('../models/Config')
 const configs = require('../config')
 const assert = require('../plugins/assert')
+const backendURL = configs.backendURL || 'http://localhost:8001'
 
 module.exports = async app => {
   const router = express.Router()
@@ -17,7 +18,8 @@ module.exports = async app => {
       res.redirect('/api/says')
     } else {
       res.render('install/index', {
-        posturl: `${configs.backendURL || 'http://localhost:8001'}/install`
+        posturl: `${backendURL}/install`,
+        loginUrl: `${backendURL}/login`
       })
     }
   })
