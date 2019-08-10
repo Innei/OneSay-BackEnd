@@ -22,6 +22,7 @@ if (dir) {
           obj.content = split_line[0].trim()
         }
         obj.create_time = Date.now()
+        // TODO 加入 ID字段
           Say.create(obj)
           ++num
       }

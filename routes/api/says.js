@@ -14,8 +14,9 @@ module.exports = app => {
     if (num) {
       let random = Math.floor(Math.random() * num)
       const item = await Say.findOne().skip(random)
+      const id = item.id
       await Say.updateOne(
-        { id: ++random },
+        { id },
         {
           $inc: {
             views: 1
@@ -25,10 +26,9 @@ module.exports = app => {
       res.send({
         item
       })
-    }
-    else {
+    } else {
       res.send({
-        msg: "没有数据"
+        msg: '没有数据'
       })
     }
   })
@@ -84,6 +84,57 @@ module.exports = app => {
     )
     res.send(item)
   })
+
+  router.get('/like', async (req, res) => {
+    const id = req.query.id
+    const isExistField = (await Say.findOne({ id })).likes
+
+    if (isExistField) {
+      Say.updateOne(
+        { id },
+        {
+          $inc: {
+            likes: 1
+          }
+        }
+      )
+        .then(ok => {
+          res.send({
+            msg: '感谢您的点赞~',
+            code: 200,
+            color: 'green',
+            time: Date.now()
+          })
+        })
+        .catch(err =>
+          res.status(500).send({
+            msg: '出错了',
+            code: 500,
+            color: 'red',
+            time: Date.now()
+          })
+        )
+    } else {
+      Say.updateOne({ id }, { $set: { likes: 1 } })
+        .then(ok => {
+          res.send({
+            msg: '感谢您的点赞~',
+            code: 200,
+            color: 'green',
+            time: Date.now()
+          })
+        })
+        .catch(err =>
+          res.status(500).send({
+            msg: '出错了',
+            code: 500,
+            color: 'red',
+            time: Date.now()
+          })
+        )
+    }
+  })
+
   app.use('/api/says', router)
 
   require('./configs')(app)

@@ -58,3 +58,6 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGE1ZWVlYmMyMmI2
 get {{host}}api/info/all
 #Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGQzMDliNTIxYmFkNWIxOWZlMzE1MyIsImlhdCI6MTU2NTM0MDA4Nn0.-2y2m7_cxNIobesCahCWQWhMfk_nYvVHhBlu6cd5WBc
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkNGQyYWNkNzRjNzM1ZGMzNDQxZTk5NyIsImlhdCI6MTU2NTM0MDU5Mn0.62O1_JdpReGFvjTL-pZbrQ6Mi7PiCebXxlf-SXbgByE
+
+### like api
+get {{host}}api/says/like?time=1565406682964
