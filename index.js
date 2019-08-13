@@ -11,9 +11,10 @@ app.use(require('cors')())
 app.use(parser.urlencoded({ extended: false }))
 app.set('key', config.key)
 
-require('./routes/api/login')(app)
+// require('./routes/api/login')(app)
+// require('./routes/api/says')(app)
+require('./routes/api/index')(app)
 require('./routes/login')(app)
-require('./routes/api/says')(app)
 require('./plugins/db')(app)
 
 // 如果没有用户就需要安装, 进入安装界面, 后续加入中间件做跳转, 想采用模板系统

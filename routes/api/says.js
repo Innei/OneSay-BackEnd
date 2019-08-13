@@ -3,11 +3,14 @@ const Say = require('../../models/Say')
 const Config = require('../../models/Config')
 const isConfig = require('../../middlewares/isConfig')()
 const auth = require('../../middlewares/auth')()
+const ip = require('../../middlewares/ip')()
+const Analyse = require('../../middlewares/analyse')()
 module.exports = app => {
   const router = express.Router({
     mergeParams: true
   })
-  router.get('/', isConfig, async (req, res) => {
+  router.use(ip)
+  router.get('/', isConfig, Analyse,async (req, res) => {
     const num = (await Config.findOne({ name: 'total' }))
       ? (await Config.findOne({ name: 'total' })).value
       : 0
