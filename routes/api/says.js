@@ -10,7 +10,7 @@ module.exports = app => {
     mergeParams: true
   })
   router.use(ip)
-  router.get('/', isConfig, Analyse,async (req, res) => {
+  router.get('/', isConfig, Analyse, async (req, res) => {
     const num = (await Config.findOne({ name: 'total' }))
       ? (await Config.findOne({ name: 'total' })).value
       : 0
@@ -36,12 +36,14 @@ module.exports = app => {
     }
   })
   router.get('/all', isConfig, async (req, res) => {
-    let id = 0
-    const saysItems = (await Say.find()).map(item => {
-      // delete item["__v"]
-      item.id = ++id
-      return item
-    })
+    const size =
+      Number(req.query.size) > 200 ? 200 : Number(req.query.size) || 20
+    const skip = Number(req.query.skip) * size || 0
+    const sort = Number(req.query.sort) || 1 // 默认正序
+    const saysItems = await Say.find()
+      .limit(size)
+      .skip(skip)
+      .sort({ id: sort >= 0 ? 1 : -1 })
     res.send(saysItems)
   })
 
@@ -69,7 +71,9 @@ module.exports = app => {
       id,
       author,
       content,
-      create_time: Date.now()
+      create_time: Date.now(),
+      likes: 0,
+      views: 0
     })
 
     res.send(model)
