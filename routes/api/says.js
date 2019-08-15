@@ -35,7 +35,7 @@ module.exports = app => {
       })
     }
   })
-  router.get('/all', isConfig, async (req, res) => {
+  router.get('/all', isConfig, Analyse, async (req, res) => {
     const size =
       Number(req.query.size) > 200 ? 200 : Number(req.query.size) || 20
     const skip = Number(req.query.skip) * size || 0
@@ -92,6 +92,7 @@ module.exports = app => {
     res.send(item)
   })
 
+  router.delete('/del/:id', auth, async (req, res) => {})
   router.get('/like', async (req, res) => {
     const id = req.query.id
     const isExistField = (await Say.findOne({ id })).likes

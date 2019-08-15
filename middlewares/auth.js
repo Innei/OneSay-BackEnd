@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const assert = require('http-assert')
 const User = require('../models/User')
+const log = require('../plugins/log')
 const unAuthStatusCode = 401
 module.exports = options => async (req, res, next) => {
   const token = req.headers.authorization || ''
@@ -8,7 +9,10 @@ module.exports = options => async (req, res, next) => {
   try {
     assert(token, unAuthStatusCode, 'jwt必须提供')
   } catch (error) {
-    res.status(unAuthStatusCode).send({ ...error, code: unAuthStatusCode })
+    log('此次请求未携带 Token,请求无效', 1)
+    return res
+      .status(unAuthStatusCode)
+      .send({ ...error, code: unAuthStatusCode })
   }
   // req.app.get === app.get   app => express 实例 ,因为这里 express实例 取不到
 
@@ -18,11 +22,9 @@ module.exports = options => async (req, res, next) => {
     if (isExist) {
       next()
     } else {
-      throw {
-        msg: "token 无效"
-      }
+      return log(`此次请求所携带的 Token 无效`, 1)
     }
   } catch (error) {
-    res.status(unAuthStatusCode).send({ ...error, code: unAuthStatusCode })
+    return res.status(unAuthStatusCode).send({ ...error, code: unAuthStatusCode })
   }
 }

@@ -1,8 +1,9 @@
 const chalk = require('chalk')
 const moment = require('moment')
+const log = require('../plugins/log')
 const Access = require('../models/Access')
 module.exports = options => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     // 时间
     const dUNIX = new Date()
     const day = dUNIX.getDate()
@@ -12,7 +13,7 @@ module.exports = options => {
     // 获取 ip
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress
 
-    Access.create({
+    await Access.create({
       time: Date.now(dUNIX),
       formatTime,
       ip,
@@ -24,8 +25,8 @@ module.exports = options => {
         day
       }
     })
-    console.log(`[${chalk.yellow(formatTime)}] 来源IP ${chalk.green(ip)}`)
-
-    next()
+    // console.log(`[${chalk.yellow(formatTime)}] 来源IP ${chalk.green(ip)}`)
+    log(`来源IP ${chalk.green(ip)}`, 0)
+    await next()
   }
 }
