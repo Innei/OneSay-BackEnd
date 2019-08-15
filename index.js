@@ -25,7 +25,7 @@ if (!isInstalled) {
   require('./routes/install')(app)
 }
 
-app.use(express.static(__dirname+'/public'))
+app.use(express.static(__dirname + '/public'))
 
 app.listen(8001, () => {
   console.log('server is up, http://localhost:8001 ')

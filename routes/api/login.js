@@ -13,7 +13,14 @@ module.exports = app => {
     const { username, password } = req.body
 
     const user = await User.findOne({ username }).select('+password')
+
     assert(user, 422, '用户不存在')
+
+    if (!user) {
+      res.status(422).send({
+        msg: '用户名不存在'
+      })
+    }
     const isValid = require('bcrypt').compareSync(password, user.password)
     assert(isValid, 422, '密码错误')
     const token = jwt.sign(
@@ -22,7 +29,7 @@ module.exports = app => {
       },
       app.get('key')
     )
-    res.send(token)
+    res.send({ token })
   })
 
   router.post('/auth', async (req, res) => {
@@ -41,4 +48,12 @@ module.exports = app => {
       })
   })
   app.use('/api/login', router)
+
+  // 错误处理函数
+  router.use(async (err, req, res, next) => {
+    // console.log(err)
+    res.status(err.statusCode || 500).send({
+      message: err.message
+    })
+  })
 }

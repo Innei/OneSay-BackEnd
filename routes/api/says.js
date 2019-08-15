@@ -92,7 +92,10 @@ module.exports = app => {
     res.send(item)
   })
 
-  router.delete('/del/:id', auth, async (req, res) => {})
+  router.delete('/del/:id', async (req, res) => {
+    const id = req.params.id
+    res.send(await Say.deleteOne({ id }))
+  })
   router.get('/like', async (req, res) => {
     const id = req.query.id
     const isExistField = (await Say.findOne({ id })).likes
