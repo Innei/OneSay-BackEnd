@@ -1,6 +1,7 @@
 const express = require('express')
 const config = require('./config')
 const parser = require('body-parser')
+require('express-async-errors')
 
 const app = express()
 
@@ -28,5 +29,10 @@ if (!isInstalled) {
 app.use(express.static(__dirname + '/public'))
 
 app.listen(8001, () => {
-  console.log('server is up, http://localhost:8001 ')
+  process.stdout.write(`  ____           ____         
+ / __ \___  ___ / __/__ ___ __
+/ /_/ / _ \/ -_)\ \/ _ \`/ // /
+\____/_//_/\__/___/\_,_/\_, / 
+                       /___/  \n`)
+  require('./plugins/log')('server is up, http://localhost:8001', 0)
 })

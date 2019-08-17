@@ -22,7 +22,5 @@ module.exports = (msg, type = 0) => {
       process.stdout.write(chalk.green(`[${notice.toUpperCase()}]`))
       break
   }
-  process.stdout.write(
-    `[${chalk.yellow(formatTime)}] ${msg}\n`
-  )
+  process.stdout.write(`${chalk.yellow('[' + formatTime + ']')} ${msg}\n`)
 }

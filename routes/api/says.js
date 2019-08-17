@@ -51,7 +51,7 @@ module.exports = app => {
     const { author, content } = req.body
     let id = 0
     if (!(await Config.findOne({ name: 'total' }))) {
-      const config = await Config.create({
+      await Config.create({
         name: 'total',
         value: 1
       })
@@ -65,7 +65,7 @@ module.exports = app => {
           }
         }
       )
-      id = (await Config.findOne({ name: 'total' })).value
+      id = (await Say.findOne().sort({ id: -1 })).id + 1
     }
     const model = await Say.create({
       id,
@@ -92,7 +92,7 @@ module.exports = app => {
     res.send(item)
   })
 
-  router.delete('/del/:id', async (req, res) => {
+  router.delete('/del/:id', auth, async (req, res) => {
     const id = req.params.id
     res.send(await Say.deleteOne({ id }))
   })

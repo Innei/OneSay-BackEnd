@@ -2,7 +2,7 @@ const chalk = require('chalk')
 const moment = require('moment')
 const log = require('../plugins/log')
 const Access = require('../models/Access')
-module.exports = options => {
+module.exports = (options = {}) => {
   return async (req, res, next) => {
     // 时间
     const dUNIX = new Date()
@@ -26,7 +26,7 @@ module.exports = options => {
       }
     })
     // console.log(`[${chalk.yellow(formatTime)}] 来源IP ${chalk.green(ip)}`)
-    log(`来源IP ${chalk.green(ip)}`, 0)
+    log(`来源IP ${chalk.green(ip)} ${options.msg ? `:${options.msg}` : ''}`, 0)
     await next()
   }
 }

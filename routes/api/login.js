@@ -6,10 +6,11 @@ const express = require('express')
 const assert = require('http-assert')
 const User = require('../../models/User')
 const jwt = require('jsonwebtoken')
+const ip = require('../../middlewares/ip')
 module.exports = app => {
   const router = express.Router()
 
-  router.post('/', async (req, res) => {
+  router.post('/', ip({msg: '此 ip 尝试登陆后台'}), async (req, res) => {
     const { username, password } = req.body
 
     const user = await User.findOne({ username }).select('+password')
@@ -43,7 +44,7 @@ module.exports = app => {
       })
     } else
       res.send({
-        msg: '本地 token 不正确',
+        msg: '身份验证已过期',
         code: 401
       })
   })
@@ -52,7 +53,7 @@ module.exports = app => {
   // 错误处理函数
   router.use(async (err, req, res, next) => {
     // console.log(err)
-    res.status(err.statusCode || 500).send({
+    res.status(err.statusCode || 401).send({
       message: err.message
     })
   })
